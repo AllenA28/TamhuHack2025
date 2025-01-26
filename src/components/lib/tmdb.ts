@@ -1,11 +1,15 @@
 export const API_KEY = import.meta.env.PUBLIC_TMDB_API_KEY;
 export const BASE_URL = "https://api.themoviedb.org/3/movie";
+import { onMount } from "svelte";
 import { writable } from "svelte/store";
-
+// import mongodb
+// import { MongoClient } from 'mongodb';
+export const isSearching: any = writable(false);
 export const currentVideo: any = writable(null);
 export const searchTerm: any = writable('');
+export const searchedMovie: any = writable('');
 export type MovieCategory = 'popular' | 'top_rated' | 'now_playing' | 'upcoming';
-
+const uri = "mongodb+srv://users:<db_password>@cluster0.yp3lf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 export interface Movie {
     id: number;
@@ -37,6 +41,7 @@ export async function fetchVideos(id: number) {
 
 export async function searchMovie(title: string): Promise<Movie> {
     // search movie by the title or whatever is close
-    const response = await fetch(`${BASE_URL}/3/search/movie?api_key=${API_KEY}&query=${title}`);
-    return response.json();
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${title}`);
+    const data: any = response.json();
+    return data.results;
 }

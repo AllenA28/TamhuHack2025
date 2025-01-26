@@ -3,10 +3,10 @@
     import Header from './Header.svelte';
     import MovieCard from './MovieCard.svelte';
     import SearchBar from './SearchBar.svelte';
-    import { searchTerm } from '../lib/tmdb';
+    import { searchTerm, isSearching, searchMovie } from '../lib/tmdb';
     import { fetchMovies, type Movie, type MovieCategory } from '../lib/tmdb';
     import { onMount } from 'svelte';
-    import { currentVideo, searchMovie } from '../lib/tmdb';
+    import { currentVideo } from '../lib/tmdb';
     
     type Category = {
         id: MovieCategory;
@@ -24,8 +24,6 @@
 
     let isLoading = $state(false);
     
-    console.log(import.meta.env.PUBLIC_TMDB_API_KEY)
-
     async function loadCategoryMovies(category: Category) {
         isLoading = true;
         try {
@@ -36,6 +34,9 @@
             isLoading = false;
         }
     }
+
+    
+    
 
     function loadMore(category: Category) {
         category.page += 1;
@@ -48,7 +49,7 @@
 </script>
 
 
-<button onclick={() =>{searchMovie("The Godfather")}}>test</button>
+<!-- <button onclick={() =>{searchMovie("The Godfather")}}>test</button> -->
 
 {#if $currentVideo != null}
 <div class="sticky top-0 left-0 w-full h-full bg-black/50 backdrop-blur-sm z-[60]">
@@ -65,12 +66,14 @@
     <main class="p-8 max-w-7xl mx-auto">
         <SearchBar />
 
-        {#if $searchTerm}
+        {#if $isSearching}
             <h2 class="text-2xl font-bold mb-6">Search Results</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 <!-- {#each filteredMovies as movie (movie.id)}
                     <MovieCard {movie} />
                 {/each} -->
+                <!-- <MovieCard {movie}/> -->
+                
             </div>
         {:else}
             <div class="space-y-8">

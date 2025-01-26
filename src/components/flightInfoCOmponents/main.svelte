@@ -36,17 +36,22 @@
     .button {
         display: inline-block;
         padding: 10px 20px;
-        background-color: #333;
         color: white;
+        font-size: 15px;
         text-decoration: none;
         border-radius: 5px;
         font-weight: bold;
-        transition: background-color 0.3s ease;
+        transition: 0.3s ease;
     }
 
     .button:hover {
-        background-color: #555;
+        padding: 15px 25px;
+        font-size: 23px;
     }
+    :global(body) {
+    background-color: black;
+    }
+
 </style>
 <!--<div>hello from svelte</div>
 

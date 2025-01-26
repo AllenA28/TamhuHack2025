@@ -53,15 +53,24 @@
     >
     <div class="relative bg-slate-800 rounded-xl max-w-2xl w-full overflow-hidden shadow-xl">
         <div class="relative aspect-video bg-slate-700">
-            <img
+            <div class="absolute inset-0  bg-clip-content">
+                <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
-                class="w-full h-full object-cover"
-            />
+                class="w-full h-full object-cover z-[8] bg-slate-900/80 blur-sm"
+                />    
+            </div>
+            <div class="absolute w-full h-full z-[9]">
+                <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                    class="w-full h-full object-contain z-[9]"
+                />
+            </div>
             <button onclick={toggleModal} class="absolute top-4 left-4 justify-center bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg transition-colors z-10">
                 <img src="/back.png" alt="back" class="w-4 h-4"/>  
             </button>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
+            <div class="absolute mb-[-10px] inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
         </div>
 
         <div class="p-6 space-y-4">
