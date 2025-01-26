@@ -1,14 +1,27 @@
 <script>
     import { T, useTask, useThrelte } from '@threlte/core'
-    import { interactivity, useTexture, useGltf } from '@threlte/extras'
-    import {Spring} from 'svelte/motion'
+    import { OrbitControls, interactivity, useTexture, useGltf, MeshLineGeometry, MeshLineMaterial  } from '@threlte/extras'
+    //import {Spring} from 'svelte/motion'
+    import { CatmullRomCurve3, Vector3 } from 'three'
+
+
+    const curve = new CatmullRomCurve3([
+      new Vector3(-7, 3.9, 6),
+      new Vector3(-1.9, 7, 8),
+      new Vector3(8, 10.5, 9),
+      new Vector3(15, 13, 9.5)
+    ])
     
+
+    const points = curve.getPoints(100)
+    
+   
 
     interactivity()
     const scale = 2
     const airplane = useGltf('boeing.glb')
     
-
+    
     let rotation = 0
     
     useTask((delta) => {
@@ -32,11 +45,20 @@
     }
 
     let pathGeometry = new THREE.BufferGeometry().setFromPoints(pathPoints);
-
+    
 </script>
 
 
-
+<T.Mesh>
+  <MeshLineGeometry {points} />
+  <MeshLineMaterial
+    width={0.1}
+    color='#FDDA0D'
+    transparent
+    depthTest={true}
+    depthWrite = {false}
+  />
+</T.Mesh>
 <div class="w-full h-full m-0-0">
   
   
@@ -47,6 +69,7 @@
         ref.lookAt(0, 0, 0)
       }}
     />
+    
     <T.DirectionalLight position={[15, 30, 70]} />
     <T.Mesh
     rotation.y={rotation}
@@ -63,14 +86,15 @@
         <!--<T.MeshBasicMaterial map={globalTexture} /> -->
     </T.Mesh>
     {#await airplane then gltf}
-      <T is={gltf.scene} position = {[10,12,10]} scale = {0.057}
+      <T is={gltf.scene} 
+         position = {[14,15.58,15]} 
+         scale = {0.03}
          rotation.x={25}
          rotation.z = {30.5}
          rotation.y = {24.25}
+         renderOrder={1}
       />
   {/await}
-    <T.Line geometry={pathGeometry}>
-    <T.LineBasicMaterial color="red" linewidth={3} />
-    </T.Line>
+    
 
 </div>

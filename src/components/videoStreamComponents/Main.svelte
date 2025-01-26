@@ -3,10 +3,11 @@
     import Header from './Header.svelte';
     import MovieCard from './MovieCard.svelte';
     import SearchBar from './SearchBar.svelte';
+    import { searchTerm } from '../lib/tmdb';
     import { fetchMovies, type Movie, type MovieCategory } from '../lib/tmdb';
     import { onMount } from 'svelte';
-    import { currentVideo } from '../lib/tmdb';
-
+    import { currentVideo, searchMovie } from '../lib/tmdb';
+    
     type Category = {
         id: MovieCategory;
         title: string;
@@ -14,18 +15,16 @@
         page: number;
     };
 
-    let categories: Category[] = [
+    let categories: Category[] = $state([
         { id: 'popular', title: 'Popular on SkyCinema', movies: [], page: 1 },
         { id: 'now_playing', title: 'Now Playing', movies: [], page: 1 },
         { id: 'top_rated', title: 'Top Rated', movies: [], page: 1 },
         { id: 'upcoming', title: 'New Releases', movies: [], page: 1 }
-    ];
+    ]);
 
-    let searchTerm = '';
-    let isLoading = false;
-
-    $: filteredMovies = categories.flatMap(c => c.movies)
-        .filter(movie => movie.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    let isLoading = $state(false);
+    
+    console.log(import.meta.env.PUBLIC_TMDB_API_KEY)
 
     async function loadCategoryMovies(category: Category) {
         isLoading = true;
@@ -48,9 +47,12 @@
     });
 </script>
 
+
+<button onclick={() =>{searchMovie("The Godfather")}}>test</button>
+
 {#if $currentVideo != null}
 <div class="sticky top-0 left-0 w-full h-full bg-black/50 backdrop-blur-sm z-[60]">
-    <iframe width={window.innerWidth} height={window.innerHeight} src="https://www.youtube.com/embed/{$currentVideo.results[0].key}?&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width={window.innerWidth} height={window.innerHeight} src="https://www.youtube.com/embed/{$currentVideo.results[0].key}?&controls=1&modestbranding=1&showinfo=0&rel=0&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     <button class="absolute top-4 left-4 justify-center bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg transition-colors z-30">
         <img onclick={() => {$currentVideo = null}} src="/back.png" alt="back" class="w-4 h-4"/>
     </button>
@@ -58,17 +60,17 @@
 {/if}
 
 <div class="min-h-screen bg-gradient-to-b from-slate-900 to-sky-900 text-white">
-    <Header class="z-50" title="SkyCinema ✈️" />
+    <Header title="SkyCinema ✈️" />
 
     <main class="p-8 max-w-7xl mx-auto">
-        <SearchBar bind:searchTerm />
+        <SearchBar />
 
-        {#if searchTerm}
+        {#if $searchTerm}
             <h2 class="text-2xl font-bold mb-6">Search Results</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                {#each filteredMovies as movie (movie.id)}
+                <!-- {#each filteredMovies as movie (movie.id)}
                     <MovieCard {movie} />
-                {/each}
+                {/each} -->
             </div>
         {:else}
             <div class="space-y-8">

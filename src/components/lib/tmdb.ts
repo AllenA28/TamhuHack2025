@@ -1,9 +1,9 @@
-export const API_KEY = "f4a59a5c1693ff9fb6c8c6b7e70b2180";
+export const API_KEY = import.meta.env.PUBLIC_TMDB_API_KEY;
 export const BASE_URL = "https://api.themoviedb.org/3/movie";
 import { writable } from "svelte/store";
 
 export const currentVideo: any = writable(null);
-
+export const searchTerm: any = writable('');
 export type MovieCategory = 'popular' | 'top_rated' | 'now_playing' | 'upcoming';
 
 
@@ -32,5 +32,11 @@ export async function fetchMovieDetails(id: number): Promise<Movie> {
 export async function fetchVideos(id: number) {
     // calls http://api.themoviedb.org/3/movie/157336/videos?api_key=###
     const response = await fetch(`${BASE_URL}/${id}/videos?api_key=${API_KEY}`);
+    return response.json();
+}
+
+export async function searchMovie(title: string): Promise<Movie> {
+    // search movie by the title or whatever is close
+    const response = await fetch(`${BASE_URL}/3/search/movie?api_key=${API_KEY}&query=${title}`);
     return response.json();
 }
