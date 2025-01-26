@@ -21,7 +21,6 @@
 
 <header style= 'top: 85%; text-align: center;'>
     <p class = "button">Al Goled, Sudan to Puerto Escondido, Mexico</p>
-    <p> AA123</p>
 </header>
 
 
