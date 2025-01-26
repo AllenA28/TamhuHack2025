@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {fetchVideos} from "../lib/tmdb";
+    import {fetchVideos, watchPartyMode, watching, seatNumber} from "../lib/tmdb";
     import { currentVideo } from "../lib/tmdb";
     import type { Movie } from "../lib/tmdb";
     const prop = $props();
@@ -12,10 +12,33 @@
     }
     async function getVideo(){        
         $currentVideo = await fetchVideos(movie.id)
-        console.log(JSON.stringify($currentVideo))
+        if($currentVideo.results[0] == undefined){
+            $currentVideo = null;
+            return;
+        }
         moadalVisible = false;
+        $watchPartyMode = false;
     }
-
+    async function startWatchParty(){
+        $currentVideo = await fetchVideos(movie.id)
+        moadalVisible = false;
+        $watchPartyMode = true;
+        if($currentVideo.results[0] == undefined){
+            $currentVideo = null;
+            return;
+        }
+        $watching = $seatNumber;
+        // create a room
+        fetch("/api/chat/createRoom", {
+            method: "POST",
+            body: JSON.stringify({
+                owner: $seatNumber,
+                password: "1234",
+                video: $currentVideo.results[0].key,
+                videotitle: $currentVideo.results[0].name
+            })
+        });
+    }
     async function playVideo(){
         console.log($currentVideo)
     }
@@ -87,7 +110,7 @@
                     <button onclick={getVideo} class="bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg transition-colors">
                         <img src="/play.svg" alt="play" class="w-5 h-5 mx-auto" /> 
                     </button>
-                    <button class="w-full bg-cyan-700 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg transition-colors">
+                    <button onclick={startWatchParty} class="w-full bg-cyan-700 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg transition-colors">
                         <img src="/party.svg" alt="play" class="w-5 h-5 mx-auto" />
                     </button>
                 </div>

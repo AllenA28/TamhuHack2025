@@ -1,5 +1,6 @@
 <script lang="ts">
     export let title: string;
+    import {controlledContent} from '../lib/tmdb';
 </script>
 
 <header class="p-6 flex justify-between items-center bg-slate-800/50 backdrop-blur-md sticky top-0 z-50">
@@ -9,14 +10,11 @@
     </div>
 
     <nav class="flex gap-4">
-        <a href="flightInfo" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-slate-700/50 transition-all">
+        <a href="flightInfo" class="flex items-center gap-.8 px-4 py-2 rounded-lg hover:bg-slate-700/50 transition-all">
             <i class="fas fa-plane text-lg"></i>
-            Flight Info
+            Flight Tracker
         </a>
-        <a href="parentalControl" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-slate-700/50 transition-all">
-            <i class="fas fa-child text-lg"></i>
-            Parental Controls
-        </a>
+
     </nav>
 </header>
 

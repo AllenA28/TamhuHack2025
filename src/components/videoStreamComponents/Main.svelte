@@ -3,10 +3,13 @@
     import Header from './Header.svelte';
     import MovieCard from './MovieCard.svelte';
     import SearchBar from './SearchBar.svelte';
-    import { searchTerm, isSearching, searchMovie } from '../lib/tmdb';
+    import {isSearching, searchMovie, searchedMovie, filteredMovies } from '../lib/tmdb';
     import { fetchMovies, type Movie, type MovieCategory } from '../lib/tmdb';
     import { onMount } from 'svelte';
-    import { currentVideo } from '../lib/tmdb';
+    import { currentVideo, seatNumber } from '../lib/tmdb';
+    import VideoPlayer from './VideoPlayer.svelte';
+
+
     
     type Category = {
         id: MovieCategory;
@@ -21,6 +24,8 @@
         { id: 'top_rated', title: 'Top Rated', movies: [], page: 1 },
         { id: 'upcoming', title: 'New Releases', movies: [], page: 1 }
     ]);
+    
+    $inspect(categories);
 
     let isLoading = $state(false);
     
@@ -35,9 +40,21 @@
         }
     }
 
-    
-    
+    // let filteredMovies;
+    // async function getFilteredMovies() {
+    //     if (searchedMovie){
+    //         filteredMovies = await searchMovie(searchedMovie);
+    //     }
+    // }
 
+
+    // let allMovies = $derived([ ...new Set(categories.flatMap(category => (category.movies.map(el => el.title))))]); 
+    
+    // let filteredMovies = $state([]);
+    // if (searchedMovie){
+    //     filteredMovies = allMovies.match(searchedMovie);
+    // }    
+    $inspect($filteredMovies);
     function loadMore(category: Category) {
         category.page += 1;
         loadCategoryMovies(category);
@@ -46,33 +63,42 @@
     onMount(async () => {
         await Promise.all(categories.map(loadCategoryMovies));
     });
+    let seatspot = $state("");
+
 </script>
 
+{#if $seatNumber == null}
+    <input type="text" bind:value={seatspot} placeholder="Enter your seat number"/>
+    <button onclick={() =>{$seatNumber = seatspot}}>1</button>
+{/if}
 
-<!-- <button onclick={() =>{searchMovie("The Godfather")}}>test</button> -->
+<!-- <button onclick={() =>{searchMovie("The")}}>test</button> -->
 
 {#if $currentVideo != null}
-<div class="sticky top-0 left-0 w-full h-full bg-black/50 backdrop-blur-sm z-[60]">
-    <iframe width={window.innerWidth} height={window.innerHeight} src="https://www.youtube.com/embed/{$currentVideo.results[0].key}?&controls=1&modestbranding=1&showinfo=0&rel=0&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    <button class="absolute top-4 left-4 justify-center bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg transition-colors z-30">
-        <img onclick={() => {$currentVideo = null}} src="/back.png" alt="back" class="w-4 h-4"/>
-    </button>
-</div>
+    <VideoPlayer />
 {/if}
 
 <div class="min-h-screen bg-gradient-to-b from-slate-900 to-sky-900 text-white">
-    <Header title="SkyCinema ✈️" />
+    <Header title="SkyCinema 🎥🍿" />
 
     <main class="p-8 max-w-7xl mx-auto">
         <SearchBar />
 
-        {#if $isSearching}
+        <!-- <ChatBlob messages = {[{messager: "23A", message: "BOO"}, 
+                                 {messager: "23A", message: "BOO"},
+                                  {messager: "23B", message: "DSF"}]}
+
+                colorMap = {[['23A', 'purple'], ["23B", "red"]]}      
+        /> -->
+
+        {#if $searchedMovie != null && JSON.stringify($searchedMovie) != JSON.stringify("")}
             <h2 class="text-2xl font-bold mb-6">Search Results</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                <!-- {#each filteredMovies as movie (movie.id)}
+
+                {#each $filteredMovies.results as movie (movie.id)}
                     <MovieCard {movie} />
-                {/each} -->
-                <!-- <MovieCard {movie}/> -->
+                {/each}
+                <!-- <!-- <MovieCard {movie}/> -->
                 
             </div>
         {:else}
@@ -110,5 +136,7 @@
                 <i class="fas fa-spinner fa-spin text-4xl text-cyan-400"></i>
             </div>
         {/if}
+
+        
     </main>
 </div>

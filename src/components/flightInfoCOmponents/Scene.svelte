@@ -14,8 +14,8 @@
     
 
     const points = curve.getPoints(100)
-    const starTexture = useTexture('stars.png')
-const globeTexture = useTexture('globe.jpg')
+    const starTexture = useTexture('stars2.jpeg')
+const globeTexture = useTexture('earthmap1.webp')
 
     interactivity()
     const scale = 2
@@ -27,7 +27,7 @@ const globeTexture = useTexture('globe.jpg')
     let rotation = 0
     
     useTask((delta) => {
-        rotation += (delta * 0.02)
+        rotation += (delta * 0.011)
     })
 
     import * as THREE from 'three';
@@ -78,7 +78,7 @@ const globeTexture = useTexture('globe.jpg')
   })
 
 
-  /// next bit just added
+  /// next bit just
   const toonMaterial = new THREE.ShaderMaterial({
   uniforms: {
     color: { value: new THREE.Color('#FDDA0D') },
@@ -113,15 +113,17 @@ const globeTexture = useTexture('globe.jpg')
   
     <T.PerspectiveCamera
       makeDefault
-      position={[20, 20, 20]}  
+      position={[19, 10, 24]}  
       oncreate={(ref) => {
         ref.lookAt(0, 0, 0)
       }}
     >
     <OrbitControls enableDamping />
     </T.PerspectiveCamera>
-    <T.DirectionalLight position={[15, 30, 70]} intensity={1} />
-    <T.DirectionalLight position={[15, 30, -70]} intensity={1} />
+    <T.DirectionalLight position={[15, 30, 70]} intensity={1}/>
+    <T.DirectionalLight position={[13, 30, -70]} intensity={1} />
+    <T.DirectionalLight position={[13, -30, 0]} intensity={1} />
+    
     <T.Mesh
     rotation.y={rotation}
       scale={scale}
@@ -134,28 +136,32 @@ const globeTexture = useTexture('globe.jpg')
        scale = {2}
        rotation.x={0}
        rotation.z = {0}
-       rotation.y = {rotation}
+       rotation.y = {rotation-6.7}
        renderOrder={1}
        
     />
+    {/await}
+
+    
+    
     {#await path then gltf}
-  <T is={gltf.scene} 
-    position={[0,0,0]} 
-    scale={2}
-    rotation.x={0}
-    rotation.z={0}
-    rotation.y={rotation}
-    renderOrder={1}
-    receiveShadow={false}
-    on:create={({ ref }) => {
-      ref.traverse((child) => {
-        if (child.isMesh) {
-          child.material = toonMaterial;
-        }
-      });
-    }}
-  />
-{/await}
+    <T is={gltf.scene} 
+      position={[0,0,0]} 
+      scale={2}
+      rotation.x={0}
+      rotation.z={0}
+      rotation.y={rotation-6.7}
+      renderOrder={1}
+      receiveShadow={false}
+      on:create={({ ref }) => {
+        ref.traverse((child) => {
+          if (child.isMesh) {
+            child.material = toonMaterial;
+          }
+        });
+      }}
+    />
+  {/await}
         <!-- <T.SphereGeometry args={[5, 64, 32]} /> -->
         <!-- <T.BoxGeometry args={[1, 2, 1]} />
         {#await useTexture('globe.jpg') then texture}
@@ -178,8 +184,8 @@ const globeTexture = useTexture('globe.jpg')
   {/await}
   <Stars 
   radius={100}
-  depth={50}
-  count={5000}
+  depth={100}
+  count={50000}
   factor={4}
   saturation={0}
   fade
@@ -207,11 +213,11 @@ const globeTexture = useTexture('globe.jpg')
   />
 </T.Mesh> -->
 <T.Mesh scale={2.5}>
-  <T.SphereGeometry args={[5, 64, 64]} />
+  <T.SphereGeometry args={[5.5, 64, 64]} />
   <FakeGlowMaterial 
-    glowColor="#3399ff"
-    glowInternalRadius={4.5}
-    glowSharpness={10}
+    glowColor="#1E5B99"
+    glowInternalRadius={4.6}
+    glowSharpness={5}
     falloff={0.5}
     opacity={0.1}
   />

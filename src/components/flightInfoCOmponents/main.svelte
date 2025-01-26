@@ -10,12 +10,20 @@
         <a href="/" class="button">Home</a>
     </nav>
 </header>
-
+<header style= 'top: 7%; text-align: center;'>
+    <p class = "button" style = 'font-size: 23px; color:yellow; '> Flight Tracker ✈️ </p>
+</header>
 <div style="width: 100svw; height: 100svh;">  
     <Canvas renderMode="on-demand">
         <Scene/>
     </Canvas>
 </div>
+
+<header style= 'top: 85%; text-align: center;'>
+    <p class = "button">Al Goled, Sudan to Puerto Escondido, Mexico</p>
+    <p> AA123</p>
+</header>
+
 
 <style>
     header {
@@ -26,11 +34,13 @@
         background-color: black;
         padding: 10px 0;
         z-index: 1000;
+        visibility: hidden;
+        
     }
 
     nav {
         display: flex;
-        justify-content: center;
+        justify-content: right;
     }
 
     .button {
@@ -42,6 +52,7 @@
         border-radius: 5px;
         font-weight: bold;
         transition: 0.3s ease;
+        visibility: visible;
     }
 
     .button:hover {

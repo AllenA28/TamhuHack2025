@@ -1,9 +1,16 @@
 ---
-// add imports here
+import Main from '../components/flightInfoCOmponents/main.svelte';
 export const prerender = false;
 ---
 
-
-<div> Manage Parental Control</div>
-
-<a class="bg-slate-300 border-2 border-slate-400 p-3" href="/"> Home Button</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Info</title>
+</head>
+<body class="w-full h-full m-0">
+    <Main client:load class="w-full h-full m-0"/>
+</body>
+</html>

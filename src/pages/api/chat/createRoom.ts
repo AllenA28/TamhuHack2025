@@ -3,7 +3,7 @@ import { roomsCollection } from '../lib/mongo';
 
 export const POST: APIRoute = async ( {request} ) => {
   
-  const { owner, password } = await request.json();
+  const { owner, password, video, videotitle } = await request.json();
   
 
   // Create room document
@@ -12,6 +12,9 @@ export const POST: APIRoute = async ( {request} ) => {
     password,
     messages: [],
     participants: [owner],
+    video: video,
+    videotime: 0,
+    videotitle: videotitle
   };
 
   const result = await roomsCollection.insertOne(newRoom);
